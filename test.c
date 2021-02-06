@@ -7,8 +7,7 @@ int main (int argc, char* argv[]) {
 	int comando;
 	int numeroDeLineas;
 	char *error;
-
-	if (argc < 3) {
+	if (argc < 2) {
 		fprintf(stderr, "Error,faltan argumentos\n");
 		return 3;
 	} else if (argc > 3) {
@@ -16,7 +15,12 @@ int main (int argc, char* argv[]) {
 		return 4;
 	} else {
 		comando = strtol(argv[1], &error, 10);/*Se convierte a int el valor de argv*/
-		numeroDeLineas = strtol(argv[2], &error, 10);
+
+		if (argc == 2 ){
+			numeroDeLineas=10;
+		}else{
+			numeroDeLineas = strtol(argv[2], &error, 10);
+		}
 		if (numeroDeLineas < 0) {
 			fprintf(stderr, "El valor %i del parámetro lineasMostrar no es válido\n", numeroDeLineas);
 			return 1;

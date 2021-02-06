@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <unistd.h>
 /*---------------------Caracter--------------------*/
 struct caracter {
     struct caracter *sig;
@@ -17,6 +17,10 @@ Caracter *getSigCaracter(Caracter *pCaracter) {
 
 Caracter *CrearCaracter(char caracter) {
     Caracter *newCaracter = (Caracter *) malloc(sizeof(Caracter));
+    if (newCaracter==NULL){
+		printf("Se produjo un error de malloc\n");
+		exit(8);
+    }
     newCaracter->sig = NULL;
     newCaracter->valor = caracter;
     return newCaracter;
@@ -54,6 +58,10 @@ int getLenghtString(String *pString) {
 
 String *InicializarString() {
     String *newString = (String *) malloc(sizeof(String));
+    if (newString==NULL){
+		printf("Se produjo un error de malloc\n");
+		exit(8);
+    }
     newString->longitud = 0;
     newString->inicio = NULL;
     newString->final = NULL;
@@ -152,6 +160,11 @@ void setAntNodo(Nodo *pNodo, Nodo *ant) {
 
 Nodo *CrearNodo(String *valor) {
     Nodo *newNodo = (Nodo *) malloc(sizeof(Nodo));
+
+    if (newNodo==NULL){
+		printf("Se produjo un error de malloc\n");
+		exit(8);
+    }
     newNodo->sig = NULL;
     newNodo->contenido = valor;
     newNodo->valor = getLenghtString(newNodo->contenido);
@@ -207,6 +220,11 @@ typedef struct lista Lista;
 
 Lista *InicializarLista() {
     Lista *newList = (Lista *) malloc(sizeof(Lista));
+
+    if (newList==NULL){
+		printf("Se produjo un error de malloc\n");
+		exit(8);
+    }
     newList->head = NULL;
     newList->longitud = 0;
     newList->tail = NULL;
@@ -418,16 +436,19 @@ Lista *LeerEntrada(int comando, int lineasMostrar, int ordenado) {
     char caracLeido;
     Lista *pLista = InicializarLista();
     caracLeido = (char) getchar();
-    while ((caracLeido != '\n') && (lineasMostrar > 0 || lineasMostrar==-2)) {
+    while ((caracLeido != EOF) && (lineasMostrar > 0 || lineasMostrar==-2)) {
         String *str = LeerString(caracLeido);
-
         caracLeido = (char) getchar();
+	if (str==NULL || caracLeido==EOF){
+		break;
+	}
         if (ordenado == 1) {
             InsertarlistaOrdenada(pLista, str, lineasMostrar);
         } else if (ordenado == 0) {
             AnnadirNodoALaCola(pLista, str);
             if (comando == 1) {
                 lineasMostrar--;
+		MostrarString(str);
             }
         }
     }
@@ -493,7 +514,6 @@ int head(int lineasMostrar) {
         destruirLista(pLista);
         return 2;
     } else {
-        MostrarLista(pLista, lineasMostrar, 1);
         destruirLista(pLista);
         return 0;
     }
